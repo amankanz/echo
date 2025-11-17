@@ -1,17 +1,16 @@
+//src/index.js
 import express from "express";
+import reminderRoutes from "./routes/reminderRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 
 const app = express(); // Creates an Express application instance.
 const port = process.env.PORT || 3000;
 
-app.get("/", (req, res) => {
-  res.send("Hello world, Nuru here!");
-}); // Defines a route (/) that returns Hello, World!.
+// Use reminder routes
+app.use("/reminders", reminderRoutes);
 
-app.get("/nuru", (req, res) => {
-  res.send(
-    "If you want the crown be prepared for the weight that comes with it."
-  );
-});
+// Use users routes
+app.use("users", userRoutes);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
