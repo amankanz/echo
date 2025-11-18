@@ -6,6 +6,7 @@ import userRoutes from "./routes/userRoutes.js";
 const app = express(); // Creates an Express application instance.
 const port = process.env.PORT || 3000;
 
+app.use(express.json()); // Middleware to parse JSON
 // Use reminder routes
 app.use("/reminders", reminderRoutes);
 
@@ -13,5 +14,5 @@ app.use("/reminders", reminderRoutes);
 app.use("users", userRoutes);
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+  console.log(`Echo app listening on port ${port}`);
 }); // Starts the server on port 3000 and logs a confirmation message.
