@@ -56,7 +56,9 @@
 //   };
 // }
 
+//src/middleware/validationMiddleware.js
 import { ZodError } from "zod";
+import ERROR_MESSAGES from "../constants/errorMessages.js";
 
 export function validateData(schema) {
   return (req, res, next) => {
@@ -79,10 +81,10 @@ export function validateData(schema) {
 
         return res
           .status(400)
-          .json({ error: "Invalid data", details: errorMessages });
+          .json({ error: ERROR_MESSAGES.INVALID_DATA, details: errorMessages });
       }
 
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ error: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
     }
   };
 }

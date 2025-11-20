@@ -1,5 +1,7 @@
 //src/services/reminderService.js
 import { ReminderModel } from "../models/reminderModel.js";
+import CustomError from "../utils/CustomError.js";
+import ERROR_MESSAGES from "../constants/errorMessages.js";
 
 export const ReminderService = {
   async getAllReminders() {
@@ -10,7 +12,7 @@ export const ReminderService = {
   async getReminderById(reminderId) {
     // Fetch Reminder By Id
     const reminder = await ReminderModel.findById(reminderId);
-    if (!reminder) throw new Error("Reminder not found");
+    if (!reminder) throw new CustomError(ERROR_MESSAGES.REMIND_NOT_FOUND, 404);
 
     return reminder;
   },
@@ -34,6 +36,13 @@ export const ReminderService = {
     // Update Reminder
     const { reminder, notes, completed } = newValues;
 
+    // 1. Check if reminder exists BEFORE validation
+    const existing = await ReminderModel.findById(reminderId);
+    if (!existing) {
+      throw new CustomError(ERROR_MESSAGES.REMIND_NOT_FOUND, 404);
+    }
+
+    // 2. Now validate newValues
     // Build SQL dynamically
     const fields = Object.keys(newValues);
     const setClauses = fields.map((key, index) => `${key} = $${index + 1}`);
@@ -51,7 +60,6 @@ export const ReminderService = {
     // console.log(query);
     // console.log(values);
     const updatedReminder = await ReminderModel.update(query, values);
-    if (!updatedReminder) throw new Error("Reminder not found");
 
     return updatedReminder;
   },
@@ -61,14 +69,15 @@ export const ReminderService = {
     const authenticatedUserId = 3;
 
     const reminder = await ReminderModel.findById(reminderId);
-    if (!reminder) throw new Error("Reminder not found");
+    if (!reminder) throw new CustomError(ERROR_MESSAGES.REMIND_NOT_FOUND, 404);
 
     if (reminder.user_id != authenticatedUserId)
-      throw new Error("You are not authorized to delete this reminder");
+      throw new CustomError(ERROR_MESSAGES.FORBIDDEN, 403);
 
     const rowCount = await ReminderModel.delete(reminderId);
 
-    if (rowCount === 0) throw new Error("Failed to delete the reminder");
+    if (rowCount === 0)
+      throw new CustomError(ERROR_MESSAGES.INTERNAL_SERVER_ERROR, 500);
 
     return { message: "Reminder deleted successfully" };
   },

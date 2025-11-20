@@ -2,6 +2,7 @@
 import express from "express";
 import reminderRoutes from "./routes/reminderRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import errorHandlerMiddleware from "./middleware/errorHandlerMiddleware.js";
 
 const app = express(); // Creates an Express application instance.
 const port = process.env.PORT || 3000;
@@ -9,6 +10,8 @@ const port = process.env.PORT || 3000;
 app.use(express.json()); // Middleware to parse JSON
 // Use reminder routes
 app.use("/reminders", reminderRoutes);
+
+app.use(errorHandlerMiddleware);
 
 // Use users routes
 app.use("users", userRoutes);
