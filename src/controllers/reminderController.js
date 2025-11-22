@@ -3,8 +3,8 @@ import { ReminderService } from "../services/reminderService.js";
 
 export const ReminderController = {
   async getAllReminders(req, res, next) {
-    // res.send("Get all reminders");
     try {
+      console.log("Calling this function from the FE(FRONT-END)");
       const reminders = await ReminderService.getAllReminders();
       res.status(200).json(reminders);
     } catch (error) {
@@ -26,9 +26,6 @@ export const ReminderController = {
   },
 
   async createReminder(req, res, next) {
-    // const reminder = req.body.reminder;
-    // console.log(req.body);
-    // res.send(reminder);
     try {
       const newReminder = await ReminderService.createReminder(req.body);
       res.status(200).json(newReminder);
@@ -48,7 +45,6 @@ export const ReminderController = {
       );
       res.status(200).json(updateReminder);
     } catch (error) {
-      // res.status(500).send({ message: "Internal Server Error" });
       next(error);
     }
   },
@@ -60,7 +56,6 @@ export const ReminderController = {
       const reminder = await ReminderService.deleteReminder(reminderId);
       res.status(200).json(reminderId);
     } catch (error) {
-      // res.status(500).send({ message: "Internal Server Error" });
       next(error); // Pass error to errorHandlerMiddleware
     }
   },

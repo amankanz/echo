@@ -66,7 +66,8 @@ export const ReminderService = {
 
   async deleteReminder(reminderId) {
     // Delete Reminder
-    const authenticatedUserId = 3;
+    const authenticatedUserId = 1;
+    // const authenticatedUserId = reminder.user_id;
 
     const reminder = await ReminderModel.findById(reminderId);
     if (!reminder) throw new CustomError(ERROR_MESSAGES.REMIND_NOT_FOUND, 404);
